@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make BPMN"
+  short_description: "Create and verify BPMN diagrams"
+  default_prompt: "Use $make-bpmn to create a BPMN diagram from this process description."
