@@ -26,10 +26,10 @@ python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github
 
 ## Как использовать
 
-Попроси Codex использовать `$make-bpmn` и передай описание процесса:
+Попроси Codex использовать `/make-bpmn` и передай описание процесса:
 
 ```text
-Используй $make-bpmn и создай BPMN диаграмму для процесса:
+Используй /make-bpmn и создай BPMN диаграмму для процесса:
 
 1. Клиент оформляет заказ.
 2. Платежный сервис проверяет оплату.
@@ -45,31 +45,6 @@ python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github
 - PNG, если он был запрошен или нужен для передачи результата.
 - Исправленная читаемая раскладка после визуальной проверки.
 
-## Ручной рендеринг
-
-Рендерер находится внутри skill:
-
-```text
-skills/make-bpmn/scripts/bpmn_visualizer.py
-```
-
-После установки skill можно сгенерировать SVG так:
-
-```bash
-python3 "${CODEX_HOME:-$HOME/.codex}/skills/make-bpmn/scripts/bpmn_visualizer.py" path/to/diagram.bpmn
-```
-
-SVG и PNG:
-
-```bash
-python3 "${CODEX_HOME:-$HOME/.codex}/skills/make-bpmn/scripts/bpmn_visualizer.py" path/to/diagram.bpmn --png --width 2400
-```
-
-Пакетный рендеринг:
-
-```bash
-python3 "${CODEX_HOME:-$HOME/.codex}/skills/make-bpmn/scripts/bpmn_visualizer.py" "*.bpmn" --png
-```
 
 ## Требования
 
@@ -96,20 +71,6 @@ skills/
     scripts/
       bpmn_visualizer.py
 ```
-
-## Обновление
-
-Инсталлер Codex не перезаписывает уже установленный skill. Чтобы обновить локальную копию, удали старую папку и установи skill заново:
-
-```bash
-rm -rf "${CODEX_HOME:-$HOME/.codex}/skills/make-bpmn"
-
-python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo notime2/make-bpmn \
-  --path skills/make-bpmn
-```
-
-После обновления перезапусти Codex.
 
 ## Ограничения
 
