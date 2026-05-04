@@ -1,8 +1,20 @@
-# Codex Skills
+# Make BPMN
 
-Shared Codex skills.
+`make-bpmn` - skill для Codex, который помогает создавать BPMN 2.0 диаграммы из текстового описания бизнес-процесса.
 
-## Install make-bpmn
+Skill ориентирован на реальные `.bpmn` файлы с BPMN DI разметкой, а не на Mermaid или текстовое описание. В комплекте есть Python-рендерер, который строит SVG и, при наличии `cairosvg`, PNG.
+
+## Что умеет
+
+- Превращает описание процесса, пользовательского пути, операционной процедуры или интеграционного сценария в BPMN 2.0.
+- Помогает Codex выбрать структуру диаграммы: пул, дорожки, события, задачи, шлюзы, sequence flow и message flow.
+- Требует BPMN DI координаты для всех видимых элементов и связей.
+- Проверяет читаемость диаграммы через SVG-рендеринг.
+- Помогает исправлять типовые проблемы: пересечения стрелок, нечитабельные подписи, элементы вне дорожек, некорректные message flow.
+
+## Установка
+
+Установи skill из этого репозитория:
 
 ```bash
 python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
@@ -10,4 +22,97 @@ python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github
   --path skills/make-bpmn
 ```
 
-Restart Codex after installation.
+После установки перезапусти Codex, чтобы skill появился в списке доступных skills.
+
+## Как использовать
+
+Попроси Codex использовать `$make-bpmn` и передай описание процесса:
+
+```text
+Используй $make-bpmn и создай BPMN диаграмму для процесса:
+
+1. Клиент оформляет заказ.
+2. Платежный сервис проверяет оплату.
+3. Если оплата успешна, склад резервирует товары.
+4. Если оплата не прошла, поддержка связывается с клиентом.
+```
+
+Ожидаемый результат:
+
+- `.bpmn` файл с BPMN 2.0 XML.
+- BPMN DI координаты для визуального отображения.
+- SVG-рендер диаграммы.
+- PNG, если он был запрошен или нужен для передачи результата.
+- Исправленная читаемая раскладка после визуальной проверки.
+
+## Ручной рендеринг
+
+Рендерер находится внутри skill:
+
+```text
+skills/make-bpmn/scripts/bpmn_visualizer.py
+```
+
+После установки skill можно сгенерировать SVG так:
+
+```bash
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/make-bpmn/scripts/bpmn_visualizer.py" path/to/diagram.bpmn
+```
+
+SVG и PNG:
+
+```bash
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/make-bpmn/scripts/bpmn_visualizer.py" path/to/diagram.bpmn --png --width 2400
+```
+
+Пакетный рендеринг:
+
+```bash
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/make-bpmn/scripts/bpmn_visualizer.py" "*.bpmn" --png
+```
+
+## Требования
+
+- Codex с поддержкой локальных skills.
+- Python 3 для SVG-рендеринга.
+- Опционально: `cairosvg` для PNG-экспорта.
+
+Установка PNG-зависимости:
+
+```bash
+python3 -m pip install cairosvg
+```
+
+Для SVG внешние Python-пакеты не нужны.
+
+## Структура репозитория
+
+```text
+skills/
+  make-bpmn/
+    SKILL.md
+    agents/
+      openai.yaml
+    scripts/
+      bpmn_visualizer.py
+```
+
+## Обновление
+
+Инсталлер Codex не перезаписывает уже установленный skill. Чтобы обновить локальную копию, удали старую папку и установи skill заново:
+
+```bash
+rm -rf "${CODEX_HOME:-$HOME/.codex}/skills/make-bpmn"
+
+python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo notime2/make-bpmn \
+  --path skills/make-bpmn
+```
+
+После обновления перезапусти Codex.
+
+## Ограничения
+
+- Рендерер сделан для практичной проверки читаемости, а не для полной замены BPMN-редактора.
+- Некоторые продвинутые BPMN-маркеры и стили отображаются упрощенно.
+- Если нужен редкий BPMN-элемент, лучше добавить поддерживаемую фигуру и текстовую аннотацию.
