@@ -17,7 +17,7 @@ Skill ориентирован на реальные `.bpmn` файлы с BPMN 
 Установи skill из этого репозитория:
 
 ```bash
-python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo notime2/make-bpmn \
   --path skills/make-bpmn
 ```
